@@ -1,3 +1,11 @@
+"""A virtual bookshelf.
+
+User are able to add their books to the bookshelf, give them a rating, update
+the rating and search through their book lists.
+
+    Usage: flask run
+"""
+
 import os
 import random
 from flask import Flask, request, abort, jsonify
