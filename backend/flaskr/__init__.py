@@ -3,6 +3,9 @@
 User are able to add their books to the bookshelf, give them a rating, update
 the rating and search through their book lists.
 
+Attributes:
+    app: A flask Flack object creating the flask app
+
     Usage: flask run
 """
 
