@@ -51,7 +51,7 @@ def create_app(test_config=None):
             'Access-Control-Allow-Headers', 'Content-Type, Authorization, true'
         )
         response.headers.add(
-            'Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS'
+            'Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE, OPTIONS'
         )
         return response
 
