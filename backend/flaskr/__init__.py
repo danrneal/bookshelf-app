@@ -24,6 +24,15 @@ CORS(app)
 
 
 def paginate_books(request, books):
+    """Retrieve books for the current page only
+
+    Args:
+        request: A flask request object
+        books: A list of book objects
+
+    Returns:
+        A list of book objects for the given page formatted into a dict
+    """
     page = request.args.get('page', 1, type=int)
     start = (page - 1) * BOOKS_PER_SHELF
     end = start + BOOKS_PER_SHELF
