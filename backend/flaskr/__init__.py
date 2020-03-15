@@ -62,9 +62,9 @@ def create_app(test_config=None):
         Returns:
             response: A json object representing all books
         """
+
         books = Book.query.order_by(Book.id).all()
         current_books = paginate_books(request, books)
-
         if not current_books:
             abort(404)
 
@@ -92,11 +92,18 @@ def create_app(test_config=None):
         if book is None:
             abort(404)
 
-        book.rating = request.json.get('rating')
-        book.update()
+        rating = request.json.get('rating')
+        if rating:
+            book.rating = int(rating)
+
+        try:
+            book.update()
+        except Exception:  # pylint: disable=broad-except
+            abort(500)
 
         response = jsonify({
             'success': True,
+            'updated_book_id': book_id,
         })
 
         return response
@@ -117,14 +124,20 @@ def create_app(test_config=None):
         if book is None:
             abort(404)
 
-        book.delete()
-        books = Book.query.all()
-        books = [book.format() for book in books]
+        try:
+            book.delete()
+        except Exception:  # pylint: disable=broad-except
+            abort(500)
+
+        books = Book.query.order_by(Book.id).all()
+        current_books = paginate_books(request, books)
+        if not current_books:
+            abort(404)
 
         response = jsonify({
             'success': True,
             'deleted_book_id': book_id,
-            'books': books,
+            'books': current_books,
             'total_books': len(books),
         })
 
