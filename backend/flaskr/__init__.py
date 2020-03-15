@@ -151,22 +151,81 @@ def create_app(test_config=None):
             response: A json object containing the id of the book that was
                 created and a list of the remaining books
         """
-        book = Book(
-            title=request.json.get('title'),
-            author=request.json.get('author'),
-            rating=request.json.get('rating'),
-        )
-        book.insert()
-        books = Book.query.all()
-        books = [book.format() for book in books]
+
+        try:
+            book = Book(
+                title=request.json.get('title'),
+                author=request.json.get('author'),
+                rating=request.json.get('rating'),
+            )
+            book.insert()
+            book_id = book.id
+        except Exception:  # pylint: disable=broad-except
+            abort(500)
+
+        books = Book.query.order_by(Book.id).all()
+        current_books = paginate_books(request, books)
+        if not current_books:
+            abort(404)
 
         response = jsonify({
             'success': True,
-            'create_book_id': book.id,
-            'books': books,
+            'create_book_id': book_id,
+            'books': current_books,
             'total_books': len(books),
         })
 
         return response
+
+    @app.errorhandler(404)
+    def not_found(error):  # pylint: disable=unused-argument
+        """Error handler for 404 not found
+
+        Args:
+            error: unused
+
+        Returns:
+            Response: A json object with the error code and message
+        """
+        response = jsonify({
+            'success': False,
+            'error_code': 404,
+            'message': 'Not Found',
+        })
+        return response, 404
+
+    @app.errorhandler(405)
+    def method_not_allowed(error):  # pylint: disable=unused-argument
+        """Error handler for 405 method not allowed
+
+        Args:
+            error: unused
+
+        Returns:
+            Response: A json object with the error code and message
+        """
+        response = jsonify({
+            'success': False,
+            'error_code': 405,
+            'message': 'Method Not Allowed',
+        })
+        return response, 405
+
+    @app.errorhandler(500)
+    def internal_server_error(error):  # pylint: disable=unused-argument
+        """Error handler for 500 internal server error
+
+        Args:
+            error: unused
+
+        Returns:
+            Response: A json object with the error code and message
+        """
+        response = jsonify({
+            'success': False,
+            'error_code': 500,
+            'message': 'Internal Server Error',
+        })
+        return response, 500
 
     return app
