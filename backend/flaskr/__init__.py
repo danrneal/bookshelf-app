@@ -19,14 +19,29 @@ BOOKS_PER_SHELF = 8
 
 
 def create_app(test_config=None):
-    # create and configure the app
+    """Creates flask app and defines its routes
+
+    Args:
+        test_config: Config object for testing, defaults to none
+
+    Returns:
+        app: A flask application
+    """
+
     app = Flask(__name__)
     setup_db(app)
     CORS(app)
 
-    # CORS Headers
     @app.after_request
     def after_request(response):
+        """Adds response headers after request
+
+        Args:
+            response: The response object to add headers to
+
+        Returns:
+            response: The response object that the headers were added to
+        """
         response.headers.add(
             'Access-Control-Allow-Headers', 'Content-Type, Authorization, true'
         )
