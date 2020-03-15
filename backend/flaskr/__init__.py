@@ -49,14 +49,25 @@ def create_app(test_config=None):
         )
         return response
 
-    # @TODO: Write a route that retrivies all books, paginated.
-    #        You can use the constant above to paginate by eight books.
-    #        If you decide to change the number of books per page,
-    #        update the frontend to handle additional books in the styling and
-    #           pagination
-    #        Response body keys: 'success', 'books' and 'total_books'
-    # TEST: When completed, the webpage will display books including title,
-    #       author, and rating shown as stars
+    @app.route('/books')
+    def get_books():
+        """Route handler for endpoint showing all books
+
+        Returns:
+            response: A json object representing all books
+        """
+        page = request.args.get('page', 1, type=int)
+        start = (page - 1) * BOOKS_PER_SHELF
+        end = start + BOOKS_PER_SHELF
+        books = Book.query.all()
+        books = [book.format() for book in books]
+        response = jsonify({
+            'success': True,
+            'books': books[start:end],
+            'total_books': len(books),
+        })
+
+        return response
 
     # @TODO: Write a route that will update a single book's rating.
     #        It should only be able to update the rating, not the entire
