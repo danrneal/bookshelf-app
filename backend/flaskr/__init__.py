@@ -30,6 +30,13 @@ def create_app(test_config=None):
     setup_db(app)
     CORS(app)
 
+    def paginate_books(request, books):
+        page = request.args.get('page', 1, type=int)
+        start = (page - 1) * BOOKS_PER_SHELF
+        end = start + BOOKS_PER_SHELF
+        books = [book.format() for book in books]
+        return books[start:end]
+
     @app.after_request
     def after_request(response):
         """Adds response headers after request
@@ -55,14 +62,15 @@ def create_app(test_config=None):
         Returns:
             response: A json object representing all books
         """
-        page = request.args.get('page', 1, type=int)
-        start = (page - 1) * BOOKS_PER_SHELF
-        end = start + BOOKS_PER_SHELF
-        books = Book.query.all()
-        books = [book.format() for book in books]
+        books = Book.query.order_by(Book.id).all()
+        current_books = paginate_books(request, books)
+
+        if not current_books:
+            abort(404)
+
         response = jsonify({
             'success': True,
-            'books': books[start:end],
+            'books': current_books,
             'total_books': len(books),
         })
 
