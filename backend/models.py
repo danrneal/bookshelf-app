@@ -1,13 +1,19 @@
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 
-database_name = "bookshelf"
-database_path = "postgres://{}/{}".format('localhost:5432', database_name)
+DB_DIALECT = 'postgresql'
+DB_USER = 'dneal'
+DB_PASS = ''
+DB_HOST = 'localhost'
+DB_PORT = 5432
+DB_NAME = 'bookshelf'
+
+DB_PATH = f'{DB_DIALECT}://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
 db = SQLAlchemy()
 
 
-def setup_db(app, database_path=database_path):
+def setup_db(app, database_path=DB_PATH):
     """Binds a flask application and SQLAlchemy service
 
     Args:
