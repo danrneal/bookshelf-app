@@ -2,8 +2,6 @@
 
 Attributes:
     DB_DIALECT: A str representing the dialect of the db
-    DB_USER: A str representing the username to use with the db
-    DB_PASS: A str representing the DB_USER's password
     DB_HOST: A str representing the host of the db
     DB_PORT: An int representing the port the db is running on
     DB_NAME: A str representing the db in which to connect to
@@ -15,13 +13,11 @@ from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 
 DB_DIALECT = 'postgresql'
-DB_USER = 'dneal'
-DB_PASS = ''
 DB_HOST = 'localhost'
 DB_PORT = 5432
 DB_NAME = 'bookshelf'
 
-DB_PATH = f'{DB_DIALECT}://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+DB_PATH = f'{DB_DIALECT}://{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
 db = SQLAlchemy()
 
