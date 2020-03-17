@@ -1,3 +1,16 @@
+"""Model objects used to model data for the db
+
+Attributes:
+    DB_DIALECT: A str representing the dialect of the db
+    DB_USER: A str representing the username to use with the db
+    DB_PASS: A str representing the DB_USER's password
+    DB_HOST: A str representing the host of the db
+    DB_PORT: An int representing the port the db is running on
+    DB_NAME: A str representing the db in which to connect to
+    DB_PATH: A str representing the location of the db
+    db: A SQLAlchemy service
+"""
+
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 
