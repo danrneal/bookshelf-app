@@ -99,16 +99,13 @@ def patch_book_rating(book_id):
 
     book = Book.query.get(book_id)
     if book is None:
-        abort(404)
-
-    rating = request.json.get('rating')
-    if rating:
-        book.rating = int(rating)
+        abort(422)
 
     try:
         book.update()
-    except Exception:  # pylint: disable=broad-except
-        abort(500)
+
+    except AttributeError:
+        abort(400)
 
     response = jsonify({
         'success': True,
@@ -132,7 +129,7 @@ def delete_book(book_id):
 
     book = Book.query.get(book_id)
     if book is None:
-        abort(404)
+        abort(422)
 
     try:
         book.delete()
@@ -170,8 +167,8 @@ def create_book():
         )
         book.insert()
         book_id = book.id
-    except Exception:  # pylint: disable=broad-except
-        abort(500)
+    except AttributeError:
+        abort(400)
 
     books = Book.query.order_by(Book.id).all()
     page = request.args.get('page', 1, type=int)
