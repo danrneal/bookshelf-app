@@ -164,26 +164,45 @@ def create_book():
     """
 
     try:
-        book = Book(
-            title=request.json.get('title'),
-            author=request.json.get('author'),
-            rating=request.json.get('rating'),
-        )
-        book.insert()
-        book_id = book.id
+
+        search_term = request.json.get('search')
+
+        if search_term:
+            books = Book.query.filter(
+                Book.title.ilike(f'%{search_term}%') |
+                Book.author.ilike(f'%{search_term}%')
+            ).order_by(Book.id).all()
+            page = request.args.get('page', 1, type=int)
+            current_books = paginate_books(books, page)
+
+            response = jsonify({
+                'success': True,
+                'books': current_books,
+                'total_books': len(books),
+            })
+
+        else:
+
+            book = Book(
+                title=request.json.get('title'),
+                author=request.json.get('author'),
+                rating=request.json.get('rating'),
+            )
+            book.insert()
+            book_id = book.id
+            books = Book.query.order_by(Book.id).all()
+            page = request.args.get('page', 1, type=int)
+            current_books = paginate_books(books, page)
+
+            response = jsonify({
+                'success': True,
+                'created_book_id': book_id,
+                'books': current_books,
+                'total_books': len(books),
+            })
+
     except AttributeError:
         abort(400)
-
-    books = Book.query.order_by(Book.id).all()
-    page = request.args.get('page', 1, type=int)
-    current_books = paginate_books(books, page)
-
-    response = jsonify({
-        'success': True,
-        'created_book_id': book_id,
-        'books': current_books,
-        'total_books': len(books),
-    })
 
     return response
 
