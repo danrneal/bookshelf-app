@@ -30,11 +30,6 @@ class BookTestCase(unittest.TestCase):
             'rating': 5
         }
 
-        with self.app.app_context():
-            self.db = SQLAlchemy()
-            self.db.init_app(self.app)
-            self.db.create_all()
-
     def tearDown(self):
         """Executed after each test"""
 
