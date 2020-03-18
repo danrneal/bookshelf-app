@@ -102,6 +102,11 @@ def patch_book_rating(book_id):
         abort(422)
 
     try:
+
+        rating = request.json.get('rating')
+        if rating:
+            book.rating = int(rating)
+
         book.update()
 
     except AttributeError:
