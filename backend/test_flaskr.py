@@ -18,7 +18,7 @@ class BookTestCase(unittest.TestCase):
     """
 
     def setUp(self):
-        self.app = app()
+        self.app = app
         self.client = self.app.test_client
         self.db_name = 'bookshelf'
         self.db_path = f'{DB_DIALECT}://{DB_HOST}:{DB_PORT}/{self.db_name}'
