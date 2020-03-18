@@ -78,6 +78,30 @@ class BookTestCase(unittest.TestCase):
         self.assertFalse(response.json.get('success'))
         self.assertEqual(response.json.get('message'), 'Not Found')
 
+    def test_search_books_success(self):
+        """Test successful of search of books"""
+
+        response = self.client().post('/books', json=self.new_book)
+        response = self.client().post('/books', json={'search': 'boys'})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(response.json.get('created_book_id'))
+        self.assertTrue(response.json.get('success'))
+        self.assertTrue(response.json.get('books'))
+        self.assertGreater(response.json.get('total_books'), 0)
+
+    def test_search_books_no_results(self):
+        """Test a search of books that returned no results"""
+
+        response = self.client().post('/books', json=self.new_book)
+        response = self.client().post('/books', json={'search': 'girls'})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(response.json.get('created_book_id'))
+        self.assertTrue(response.json.get('success'))
+        self.assertEqual(response.json.get('books'), [])
+        self.assertEqual(response.json.get('total_books'), 0)
+
     def test_patch_book_rating_success(self):
         """Test successful changing of a book rating"""
 
