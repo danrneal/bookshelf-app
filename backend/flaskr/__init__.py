@@ -37,10 +37,7 @@ def paginate_books(books, page):
     books = [book.format() for book in books]
     start = (page - 1) * BOOKS_PER_SHELF
     end = start + BOOKS_PER_SHELF
-
     current_books = books[start:end]
-    if not current_books:
-        abort(404)
 
     return current_books
 
@@ -75,6 +72,9 @@ def get_books():
     books = Book.query.order_by(Book.id).all()
     page = request.args.get('page', 1, type=int)
     current_books = paginate_books(books, page)
+
+    if not current_books:
+        abort(404)
 
     response = jsonify({
         'success': True,
