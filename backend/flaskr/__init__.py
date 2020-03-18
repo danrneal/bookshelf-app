@@ -136,10 +136,7 @@ def delete_book(book_id):
     if book is None:
         abort(422)
 
-    try:
-        book.delete()
-    except Exception:  # pylint: disable=broad-except
-        abort(500)
+    book.delete()
 
     books = Book.query.order_by(Book.id).all()
     page = request.args.get('page', 1, type=int)
