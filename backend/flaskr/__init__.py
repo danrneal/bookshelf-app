@@ -184,6 +184,24 @@ def create_book():
     return response
 
 
+@app.errorhandler(400)
+def bad_request(error):  # pylint: disable=unused-argument
+    """Error handler for 400 bad request
+
+    Args:
+        error: unused
+
+    Returns:
+        Response: A json object with the error code and message
+    """
+    response = jsonify({
+        'success': False,
+        'error_code': 400,
+        'message': 'Bad Request',
+    })
+    return response, 400
+
+
 @app.errorhandler(404)
 def not_found(error):  # pylint: disable=unused-argument
     """Error handler for 404 not found
@@ -220,9 +238,9 @@ def method_not_allowed(error):  # pylint: disable=unused-argument
     return response, 405
 
 
-@app.errorhandler(500)
-def internal_server_error(error):  # pylint: disable=unused-argument
-    """Error handler for 500 internal server error
+@app.errorhandler(422)
+def unprocessable_entity(error):  # pylint: disable=unused-argument
+    """Error handler for 422 unprocessable entity
 
     Args:
         error: unused
@@ -232,7 +250,7 @@ def internal_server_error(error):  # pylint: disable=unused-argument
     """
     response = jsonify({
         'success': False,
-        'error_code': 500,
-        'message': 'Internal Server Error',
+        'error_code': 422,
+        'message': 'Unprocessable Entity',
     })
-    return response, 500
+    return response, 422
