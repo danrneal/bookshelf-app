@@ -178,7 +178,7 @@ def create_book():
 
     response = jsonify({
         'success': True,
-        'create_book_id': book_id,
+        'created_book_id': book_id,
         'books': current_books,
         'total_books': len(books),
     })
