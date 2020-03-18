@@ -1,8 +1,7 @@
 """Test objects used to test the behavior of endpoints in the flaskr app"""
 
 import unittest
-from flask_sqlalchemy import SQLAlchemy
-from flaskr import app
+from flaskr import BOOKS_PER_SHELF, app
 from models import DB_DIALECT, DB_HOST, DB_PORT, setup_db, Book
 
 
