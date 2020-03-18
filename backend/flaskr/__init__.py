@@ -23,7 +23,7 @@ setup_db(app)
 CORS(app)
 
 
-def paginate_books(request, books):
+def paginate_books(books, page):
     """Retrieve books for the current page only
 
     Args:
@@ -33,11 +33,16 @@ def paginate_books(request, books):
     Returns:
         A list of book objects for the given page formatted into a dict
     """
-    page = request.args.get('page', 1, type=int)
+
+    books = [book.format() for book in books]
     start = (page - 1) * BOOKS_PER_SHELF
     end = start + BOOKS_PER_SHELF
-    books = [book.format() for book in books]
-    return books[start:end]
+
+    current_books = books[start:end]
+    if not current_books:
+        abort(404)
+
+    return current_books
 
 
 @app.after_request
@@ -68,9 +73,8 @@ def get_books():
     """
 
     books = Book.query.order_by(Book.id).all()
-    current_books = paginate_books(request, books)
-    if not current_books:
-        abort(404)
+    page = request.args.get('page', 1, type=int)
+    current_books = paginate_books(books, page)
 
     response = jsonify({
         'success': True,
@@ -136,9 +140,8 @@ def delete_book(book_id):
         abort(500)
 
     books = Book.query.order_by(Book.id).all()
-    current_books = paginate_books(request, books)
-    if not current_books:
-        abort(404)
+    page = request.args.get('page', 1, type=int)
+    current_books = paginate_books(books, page)
 
     response = jsonify({
         'success': True,
@@ -171,9 +174,8 @@ def create_book():
         abort(500)
 
     books = Book.query.order_by(Book.id).all()
-    current_books = paginate_books(request, books)
-    if not current_books:
-        abort(404)
+    page = request.args.get('page', 1, type=int)
+    current_books = paginate_books(books, page)
 
     response = jsonify({
         'success': True,
