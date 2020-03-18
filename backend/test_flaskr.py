@@ -32,15 +32,132 @@ class BookTestCase(unittest.TestCase):
     def tearDown(self):
         """Executed after each test"""
 
+    def test_create_book_success(self):
+        response = self.client().post('/books', json=self.new_book)
+        created_book_id = response.json.get('created_book_id')
+        book = Book.query.get(created_book_id)
+        self.new_book['id'] = created_book_id
 
-# @TODO: Write at least two tests for each endpoint - one each for success and
-#           error behavior.
-#        You can feel free to write additional tests for nuanced functionality,
-#        Such as adding a book without a rating, etc.
-#        Since there are four routes currently, you should have at least eight
-#           tests.
-# Optional: Update the book information in setUp to make the test database
-#           your own!
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json.get('success'))
+        self.assertTrue(response.json.get('books'))
+        self.assertTrue(response.json.get('total_books'))
+        self.assertEqual(book.format(), self.new_book)
+
+    def test_create_book_no_info_fail(self):
+        response = self.client().post('/books')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(response.json.get('success'))
+        self.assertEqual(response.json.get('message'), 'Bad Request')
+
+    def test_get_books_success(self):
+        response = self.client().post('/books', json=self.new_book)
+        response = self.client().get('books')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json.get('success'))
+        self.assertTrue(response.json.get('books'))
+        self.assertTrue(response.json.get('total_books'))
+
+    def test_get_books_out_of_range_fail(self):
+        response = self.client().post('/books', json=self.new_book)
+        total_books = response.json.get('total_books')
+        total_pages = -(-total_books // BOOKS_PER_SHELF)
+        response = self.client().get(f'/books?page={total_pages+1}')
+
+        self.assertEqual(response.status_code, 404)
+        self.assertFalse(response.json.get('success'))
+        self.assertEqual(response.json.get('message'), 'Not Found')
+
+    def test_patch_book_rating_success(self):
+        response = self.client().post('/books', json=self.new_book)
+        created_book_id = response.json.get('created_book_id')
+        response = self.client().patch(
+            f'/books/{created_book_id}',
+            json={'rating': 1},
+        )
+        book = Book.query.get(created_book_id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json.get('success'))
+        self.assertEqual(response.json.get('updated_book_id'), created_book_id)
+        self.assertEqual(book.rating, 1)
+
+    def test_patch_book_rating_out_of_range_fail(self):
+        response = self.client().post('/books', json=self.new_book)
+        created_book_id = response.json.get('created_book_id')
+        response = self.client().patch(
+            f'/books/{created_book_id+1}',
+            json={'rating': 1},
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertFalse(response.json.get('success'))
+        self.assertEqual(response.json.get('message'), 'Unprocessable Entity')
+
+    def test_patch_book_rating_no_rating_fail(self):
+        response = self.client().post('/books', json=self.new_book)
+        created_book_id = response.json.get('created_book_id')
+        response = self.client().patch(f'/books/{created_book_id}',)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(response.json.get('success'))
+        self.assertEqual(response.json.get('message'), 'Bad Request')
+
+    def test_delete_book_success(self):
+        response = self.client().post('/books', json=self.new_book)
+        created_book_id = response.json.get('created_book_id')
+        response = self.client().delete(f'/books/{created_book_id}')
+        book = Book.query.get(created_book_id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json.get('success'))
+        self.assertEqual(response.json.get('deleted_book_id'), created_book_id)
+        self.assertTrue(response.json.get('books'))
+        self.assertTrue(response.json.get('total_books'))
+        self.assertIsNone(book)
+
+    def test_delete_out_of_range_fail(self):
+        response = self.client().post('/books', json=self.new_book)
+        created_book_id = response.json.get('created_book_id')
+        response = self.client().delete(f'/books/{created_book_id+1}')
+
+        self.assertEqual(response.status_code, 422)
+        self.assertFalse(response.json.get('success'))
+        self.assertEqual(response.json.get('message'), 'Unprocessable Entity')
+
+    def test_books_patch_method_not_allowed_fail(self):
+        response = self.client().patch('/books')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertFalse(response.json.get('success'))
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_books_delete_method_not_allowed_fail(self):
+        response = self.client().delete('/books')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertFalse(response.json.get('success'))
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_book_get_method_not_allowed_fail(self):
+        response = self.client().post('/books', json=self.new_book)
+        created_book_id = response.json.get('created_book_id')
+        response = self.client().get(f'/books/{created_book_id}')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertFalse(response.json.get('success'))
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
+
+    def test_book_post_method_not_allowed_fail(self):
+        response = self.client().post('/books', json=self.new_book)
+        created_book_id = response.json.get('created_book_id')
+        response = self.client().post(f'books/{created_book_id}')
+
+        self.assertEqual(response.status_code, 405)
+        self.assertFalse(response.json.get('success'))
+        self.assertEqual(response.json.get('message'), 'Method Not Allowed')
 
 
 if __name__ == "__main__":
