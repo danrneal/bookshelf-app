@@ -52,12 +52,14 @@ def after_request(response):
     Returns:
         response: The response object that the headers were added to
     """
+
     response.headers.add(
         'Access-Control-Allow-Headers', 'Content-Type, Authorization, true'
     )
     response.headers.add(
         'Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE, OPTIONS'
     )
+
     return response
 
 
