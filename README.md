@@ -224,6 +224,7 @@ The backend has a testing suite to test all of the API endpoints
 To set up the test database:
 
 ```bash
+cd ./backend
 dropdb bookshelf_test
 createdb bookshelf_test
 psql bookshelf_test < books.psql
@@ -232,7 +233,7 @@ psql bookshelf_test < books.psql
 To run all the tests:
 
 ```bash
-usage: ./backend/test_flaskr.py
+usage: test_flaskr.py
 ```
 
 ## Credit
