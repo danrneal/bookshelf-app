@@ -59,7 +59,7 @@ Navigate to `http://127.0.0.1:3000/` to see the app in action!
 
 ## Screenshots
 
-![Bookshelf App Homepage](https://i.imgur.com/FDRRRV6.png)
+![Bookshelf App Homepage](https://i.imgur.com/JM5BbJP.png)
 
 ## API Reference
 
