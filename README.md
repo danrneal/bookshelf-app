@@ -85,11 +85,15 @@ This is returned when the requested resource does not exist. (i.e. Attempting to
 
 #### 405: Method Not Allowed
 
-This is returned when the incorrect request method is specified at an endpoint (i.e. Attempting to delete with specifying a specific book to delete)
+This is returned when the incorrect request method is specified at an endpoint. (i.e. Attempting to delete with specifying a specific book to delete)
 
 #### 422: Unprocessable Entity
 
-This is returned when the request is to be fuffilled in some way (i.e. Attempting to update a book that has previously been deleted)
+This is returned when the request is unable to be fuffilled in some way. (i.e. Attempting to update a book that has previously been deleted)
+
+#### 500: Internal Server Error
+
+This is returned when something there is a problem with the server.
 
 ### Endpoints
 
@@ -97,96 +101,95 @@ Books:
 
 #### GET /books
 
+Retrieve a list of paginated books
+
 ```bash
 curl http://127.0.0.1:5000/books?page=1
 ```
 
-* page [int] (optional): Each page returns the next 8 results (default: 1)
+- page (int) [optional]: Each page returns the next 8 results (default: 1)
 
 ```bash
 {
-    "success": true,
-    "books": [
-        {
-            "id": 1,
-            "title": "Anansi Boys",
-            "author": "Neil Gaiman",
-            "rating": 5
-        }
-    ],
-    "total_books": 1
+  "success": true,
+  "books": [
+    {
+      "id": 1,
+      "title": "Anansi Boys",
+      "author": "Neil Gaiman",
+      "rating": 5
+    }
+  ],
+  "total_books": 1
 }
 ```
 
 #### POST /books
 
+Create a new book or search all books
+
 ##### New Book
 
 ```bash
-curl -X POST Content-Type: application/json -d {"title": "Nevermore", "author": "Neil Gaiman", "rating": "5"} http://127.0.0.1:5000/books
+curl -X POST -H "Content-Type: application/json" -d '{"title": "Nevermore", "author": "Neil Gaiman", "rating": "5"}' http://127.0.0.1:5000/books
 ```
 
-* title [str]: Title of the new book
-* author [str]: Author of the new book
-* rating [int] (optional): Rating of the new book
+- title (str): Title of the new book
+- author (str): Author of the new book
+- rating (int) [optional]: Rating of the new book
 
 ```bash
 {
-    "success": true,
-    "created_book_id": 2,
-    "books": [
-        {
-            "id": 1,
-            "title": "Anansi Boys",
-            "author": "Neil Gaiman",
-            "rating": 5
-        },
-        {
-            "id": 2,
-            "title": "Nevermore",
-            "author": "Neil Gaiman",
-            "rating": 5
-        }
-    ],
-    "total_books": 2
+  "success": true,
+  "created_book_id": 2,
+  "books": [
+    {
+      "id": 1,
+      "title": "Anansi Boys",
+      "author": "Neil Gaiman",
+      "rating": 5
+    },
+    {
+      "id": 2,
+      "title": "Nevermore",
+      "author": "Neil Gaiman",
+      "rating": 5
+    }
+  ],
+  "total_books": 2
 }
 ```
 
-##### Sample Request (Search)
+##### Search Books
 
 ```bash
-curl -X POST Content-Type: application/json -d {"search": "Anansi Boys"} http://127.0.0.1:5000/books?page=1
+curl -X POST -H "Content-Type: application/json" -d '{"search": "Anansi Boys"}' http://127.0.0.1:5000/books
 ```
 
-##### Arguments (Search)
-
-page [int] (optional): Each page returns the next 8 results (default: 1)
-search [str]: The string to search for in the bookshelf
-
-##### Sample Response (Search)
+search (str): The string to search for in the bookshelf
 
 ```bash
 {
-    "success": true,
-    "books": [
-        {
-            "id": 1,
-            "title": "Anansi Boys",
-            "author": "Neil Gaiman",
-            "rating": 5
-        }
-    ],
-    "total_books": 1
+  "success": true,
+  "books": [
+    {
+      "id": 1,
+      "title": "Anansi Boys",
+      "author": "Neil Gaiman",
+      "rating": 5
+    }
+  ],
+  "total_books": 1
 }
 ```
 
 #### PATCH /books/<book_id>
 
 ```bash
-curl -X PATCH Content-Type: application/json -d {"rating": "4"} http://127.0.0.1:5000/books/1
+curl -X POST -H "Content-Type: application/json" -d '{"rating": "4"}' http://127.0.0.1:5000/books/1
 ```
 
-* rating [int]: The rating to update the book to
+- rating (int): The rating to update the book to
 
 ```bash
 {
@@ -203,17 +206,17 @@ curl -X DELETE http://127.0.0.1:5000/books/1
 
 ```bash
 {
-    "success": true,
-    "deleted_book_id": 1,
-    "books": [
-        {
-            "id": 2,
-            "title": "Nevermore",
-            "author": "Neil Gaiman",
-            "rating": 5
-        }
-    ],
-    "total_books": 1
+  "success": true,
+  "deleted_book_id": 1,
+  "books": [
+    {
+      "id": 2,
+      "title": "Nevermore",
+      "author": "Neil Gaiman",
+      "rating": 5
+    }
+  ],
+  "total_books": 1
 }
 ```
 
