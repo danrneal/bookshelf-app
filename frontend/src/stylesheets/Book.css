@@ -25,7 +25,8 @@ div.star.active {
 }
 
 .title {
-    padding: 50% 5px;
+    display: inline-block;
+    padding: 50% 0;
     width: 65%;
     color: azure;
 }
@@ -40,10 +41,8 @@ div.star.active {
 }
 
 .cover {
-    width: 80%;
-    left: 10%;
-    height: 225px;
-    padding: 5px 15px;
+    width: 144px;
+    height: 210px;
     text-align: center;
     background-size: contain;
     background-repeat: no-repeat;
