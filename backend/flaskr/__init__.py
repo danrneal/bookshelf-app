@@ -164,6 +164,7 @@ def patch_book_rating(book_id):
 
     try:
 
+        old_rating = book.rating
         rating = request.json.get('rating')
 
         if rating:
@@ -177,6 +178,8 @@ def patch_book_rating(book_id):
     response = jsonify({
         'success': True,
         'updated_book_id': book_id,
+        'old_rating': old_rating,
+        'new_rating': book.rating,
     })
 
     return response
