@@ -213,5 +213,5 @@ class BookTestCase(unittest.TestCase):
         self.assertEqual(response.json.get('message'), 'Method Not Allowed')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

@@ -29,8 +29,8 @@ def setup_db(app, database_path=DB_PATH):
         app: A flask app
         database_path: A str representing the location of the db
     """
-    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_path
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
     db.create_all()
