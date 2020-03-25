@@ -282,3 +282,21 @@ def unprocessable_entity(error):  # pylint: disable=unused-argument
         'message': 'Unprocessable Entity',
     })
     return response, 422
+
+
+@app.errorhandler(500)
+def internal_server_error(error):  # pylint: disable=unused-argument
+    """Error handler for 500 internal server error
+
+    Args:
+        error: unused
+
+    Returns:
+        Response: A json object with the error code and message
+    """
+    response = jsonify({
+        'success': False,
+        'error_code': 500,
+        'message': 'Internal Server Error',
+    })
+    return response, 500
