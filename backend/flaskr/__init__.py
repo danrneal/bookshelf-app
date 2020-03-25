@@ -158,12 +158,14 @@ def patch_book_rating(book_id):
     """
 
     book = Book.query.get(book_id)
+
     if book is None:
         abort(422)
 
     try:
 
         rating = request.json.get('rating')
+
         if rating:
             book.rating = int(rating)
 
@@ -193,6 +195,7 @@ def delete_book(book_id):
     """
 
     book = Book.query.get(book_id)
+
     if book is None:
         abort(422)
 
@@ -222,11 +225,13 @@ def bad_request(error):  # pylint: disable=unused-argument
     Returns:
         Response: A json object with the error code and message
     """
+
     response = jsonify({
         'success': False,
         'error_code': 400,
         'message': 'Bad Request',
     })
+
     return response, 400
 
 
