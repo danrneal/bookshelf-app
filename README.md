@@ -242,4 +242,4 @@ usage: test_flaskr.py
 
 ## License
 
-Fyyur is licensed under the [MIT license](https://github.com/danrneal/bookshelf-app/blob/master/LICENSE).
+Bookshelf App is licensed under the [MIT license](https://github.com/danrneal/bookshelf-app/blob/master/LICENSE).
