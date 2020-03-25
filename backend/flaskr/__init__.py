@@ -89,6 +89,62 @@ def get_books():
     return response
 
 
+@app.route('/books', methods=['POST'])
+def create_book():
+    """Route handler for endpoint to create a book
+
+    Returns:
+        response: A json object containing the id of the book that was
+            created and a list of the remaining books
+    """
+
+    try:
+
+        search_term = request.json.get('search')
+
+        if search_term:
+
+            books = Book.query.filter(
+                Book.title.ilike(f'%{search_term}%') |
+                Book.author.ilike(f'%{search_term}%')
+            ).order_by(Book.id).all()
+            page = request.args.get('patch', 1, type=int)
+            current_books = paginate_books(books, page)
+
+            response = jsonify({
+                'success': True,
+                'books': current_books,
+                'total_books': len(books),
+            })
+
+        else:
+
+            book = Book(
+                title=request.json.get('title'),
+                author=request.json.get('author'),
+                rating=request.json.get('rating'),
+            )
+
+            book.insert()
+
+            book_id = book.id
+            books = Book.query.order_by(Book.id).all()
+            page = request.args.get('page', 1, type=int)
+            current_books = paginate_books(books, page)
+
+            response = jsonify({
+                'success': True,
+                'created_book_id': book_id,
+                'books': current_books,
+                'total_books': len(books),
+            })
+
+    except AttributeError:
+        abort(400)
+
+    return response
+
+
 @app.route('/books/<int:book_id>', methods=['PATCH'])
 def patch_book_rating(book_id):
     """Route handler for endpoint updating the rating of a single book
@@ -152,59 +208,6 @@ def delete_book(book_id):
         'books': current_books,
         'total_books': len(books),
     })
-
-    return response
-
-
-@app.route('/books', methods=['POST'])
-def create_book():
-    """Route handler for endpoint to create a book
-
-    Returns:
-        response: A json object containing the id of the book that was
-            created and a list of the remaining books
-    """
-
-    try:
-
-        search_term = request.json.get('search')
-
-        if search_term:
-            books = Book.query.filter(
-                Book.title.ilike(f'%{search_term}%') |
-                Book.author.ilike(f'%{search_term}%')
-            ).order_by(Book.id).all()
-            page = request.args.get('page', 1, type=int)
-            current_books = paginate_books(books, page)
-
-            response = jsonify({
-                'success': True,
-                'books': current_books,
-                'total_books': len(books),
-            })
-
-        else:
-
-            book = Book(
-                title=request.json.get('title'),
-                author=request.json.get('author'),
-                rating=request.json.get('rating'),
-            )
-            book.insert()
-            book_id = book.id
-            books = Book.query.order_by(Book.id).all()
-            page = request.args.get('page', 1, type=int)
-            current_books = paginate_books(books, page)
-
-            response = jsonify({
-                'success': True,
-                'created_book_id': book_id,
-                'books': current_books,
-                'total_books': len(books),
-            })
-
-    except AttributeError:
-        abort(400)
 
     return response
 
