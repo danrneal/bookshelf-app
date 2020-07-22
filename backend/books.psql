@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.3
--- Dumped by pg_dump version 11.3
+-- Dumped from database version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
+-- Dumped by pg_dump version 10.12 (Ubuntu 10.12-0ubuntu0.18.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -16,12 +16,26 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
 --
--- Name: books; Type: TABLE; Schema: public; Owner: caryn
+-- Name: books; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.books (
@@ -32,10 +46,8 @@ CREATE TABLE public.books (
 );
 
 
-ALTER TABLE public.books OWNER TO caryn;
-
 --
--- Name: books_id_seq; Type: SEQUENCE; Schema: public; Owner: caryn
+-- Name: books_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.books_id_seq
@@ -47,24 +59,22 @@ CREATE SEQUENCE public.books_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.books_id_seq OWNER TO caryn;
-
 --
--- Name: books_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: caryn
+-- Name: books_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.books_id_seq OWNED BY public.books.id;
 
 
 --
--- Name: books id; Type: DEFAULT; Schema: public; Owner: caryn
+-- Name: books id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.books ALTER COLUMN id SET DEFAULT nextval('public.books_id_seq'::regclass);
 
 
 --
--- Data for Name: books; Type: TABLE DATA; Schema: public; Owner: caryn
+-- Data for Name: books; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.books (id, title, author, rating) FROM stdin;
@@ -84,18 +94,19 @@ COPY public.books (id, title, author, rating) FROM stdin;
 2	Asymmetry: A Novel	Lisa Halliday	4
 9	Insurrecto: A Novel	Gina Apostol	5
 5	Still Me: A Novel	Jojo Moyes	5
+17	Anansi Boys	Neil Gaiman	5
 \.
 
 
 --
--- Name: books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: caryn
+-- Name: books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.books_id_seq', 22, true);
 
 
 --
--- Name: books books_pkey; Type: CONSTRAINT; Schema: public; Owner: caryn
+-- Name: books books_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.books
