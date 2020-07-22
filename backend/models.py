@@ -1,4 +1,4 @@
-"""Model objects used to model data for the db
+"""Model objects used to model data for the db.
 
 Attributes:
     DB_DIALECT: A str representing the dialect of the db
@@ -7,6 +7,9 @@ Attributes:
     DB_NAME: A str representing the db in which to connect to
     DB_PATH: A str representing the location of the db
     db: A SQLAlchemy service
+
+Classes:
+    Book()
 """
 
 from sqlalchemy import Column, String, Integer
@@ -23,7 +26,7 @@ db = SQLAlchemy()
 
 
 def setup_db(app, database_path=DB_PATH):
-    """Binds a flask application and SQLAlchemy service
+    """Binds a flask application and SQLAlchemy service.
 
     Args:
         app: A flask app
@@ -37,7 +40,7 @@ def setup_db(app, database_path=DB_PATH):
 
 
 class Book(db.Model):
-    """A model representing a Book
+    """A model representing a Book.
 
     Attributes:
         id: An int that serves as the unique identifier for a book
@@ -54,26 +57,28 @@ class Book(db.Model):
     rating = Column(Integer)
 
     def __init__(self, title, author, rating):
+        """Set-up for Book object."""
         self.title = title
         self.author = author
         self.rating = rating
 
     def insert(self):
-        """Inserts a new book object into the db"""
+        """Inserts a new book object into the db."""
         db.session.add(self)
         db.session.commit()
 
-    def update(self):
-        """Updates an existing book object in the db"""
+    @staticmethod
+    def update():
+        """Updates an existing book object in the db."""
         db.session.commit()
 
     def delete(self):
-        """Deletes an existing book object from the db"""
+        """Deletes an existing book object from the db."""
         db.session.delete(self)
         db.session.commit()
 
     def format(self):
-        """Formats the book object as a dict
+        """Formats the book object as a dict.
 
         Returns:
             plant: A dict representing the book object

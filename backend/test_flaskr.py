@@ -1,4 +1,10 @@
-"""Test objects used to test the behavior of endpoints in the flaskr app"""
+"""Test objects used to test the behavior of endpoints in the flaskr app.
+
+Usage: test_flaskr.py
+
+Classes:
+    BookTestCase()
+"""
 
 import unittest
 from flaskr import BOOKS_PER_SHELF, app
@@ -6,7 +12,7 @@ from models import DB_DIALECT, DB_HOST, DB_PORT, setup_db, Book
 
 
 class BookTestCase(unittest.TestCase):
-    """This class represents the test cases for the book endpoints
+    """This class represents the test cases for the book endpoints.
 
     Attributes:
         app: A flask app from the flaskr app
@@ -17,6 +23,7 @@ class BookTestCase(unittest.TestCase):
     """
 
     def setUp(self):
+        """Set-up for BookTestCase."""
         self.app = app
         self.client = self.app.test_client
         self.db_name = "bookshelf_test"
@@ -24,7 +31,7 @@ class BookTestCase(unittest.TestCase):
         setup_db(self.app, self.db_path)
 
     def tearDown(self):
-        """Executed after each test"""
+        """Executed after each test."""
 
     def test_get_books_success(self):
         """Test successful retrieval of books."""
@@ -36,8 +43,7 @@ class BookTestCase(unittest.TestCase):
         self.assertTrue(response.json.get("total_books"))
 
     def test_get_books_out_of_range_fail(self):
-        """Test failed book retrieval when page number is out of range"""
-
+        """Test failed book retrieval when page number is out of range."""
         total_pages = -(-Book.query.count() // BOOKS_PER_SHELF)
 
         response = self.client().get(f"/books?page={total_pages+1}")
@@ -47,8 +53,7 @@ class BookTestCase(unittest.TestCase):
         self.assertEqual(response.json.get("message"), "Not Found")
 
     def test_search_books_success(self):
-        """Test successful of search of books"""
-
+        """Test successful of search of books."""
         search = {
             "search": "boys",
         }
@@ -61,8 +66,7 @@ class BookTestCase(unittest.TestCase):
         self.assertTrue(response.json.get("total_books"))
 
     def test_search_books_no_results_success(self):
-        """Test a search of books that returned no results"""
-
+        """Test a search of books that returned no results."""
         search = {
             "search": "girls",
         }
@@ -76,8 +80,7 @@ class BookTestCase(unittest.TestCase):
         self.assertEqual(response.json.get("total_books"), 0)
 
     def test_create_book_success(self):
-        """Test successful creation of a book"""
-
+        """Test successful creation of a book."""
         new_book = {
             "title": "Anansi Boys",
             "author": "Neil Gaiman",
@@ -121,8 +124,7 @@ class BookTestCase(unittest.TestCase):
         self.assertEqual(response.json.get("message"), "Method Not Allowed")
 
     def test_patch_book_rating_success(self):
-        """Test successful changing of a book rating"""
-
+        """Test successful changing of a book rating."""
         book_id = Book.query.order_by(Book.id.desc()).first().id
         rating = {
             "rating": 1,
@@ -138,8 +140,7 @@ class BookTestCase(unittest.TestCase):
         self.assertEqual(book.rating, 1)
 
     def test_patch_book_rating_out_of_range_fail(self):
-        """Test failed book rating change when book does not exist"""
-
+        """Test failed book rating change when book does not exist."""
         book_id = Book.query.order_by(Book.id.desc()).first().id
         rating = {
             "rating": 1,
@@ -152,8 +153,7 @@ class BookTestCase(unittest.TestCase):
         self.assertEqual(response.json.get("message"), "Unprocessable Entity")
 
     def test_patch_book_rating_no_rating_fail(self):
-        """Test failed book rating change when no rating is given"""
-
+        """Test failed book rating change when no rating is given."""
         book_id = Book.query.order_by(Book.id.desc()).first().id
 
         response = self.client().patch(f"/books/{book_id}")
@@ -163,8 +163,7 @@ class BookTestCase(unittest.TestCase):
         self.assertEqual(response.json.get("message"), "Bad Request")
 
     def test_delete_book_success(self):
-        """Test successful deletion of a book"""
-
+        """Test successful deletion of a book."""
         book_id = Book.query.order_by(Book.id.desc()).first().id
 
         response = self.client().delete(f"/books/{book_id}")
@@ -179,8 +178,7 @@ class BookTestCase(unittest.TestCase):
         self.assertIsNone(book)
 
     def test_delete_book_out_of_range_fail(self):
-        """Test failed book deletion when book does not exist"""
-
+        """Test failed book deletion when book does not exist."""
         book_id = Book.query.order_by(Book.id.desc()).first().id
 
         response = self.client().delete(f"/books/{book_id+1}")

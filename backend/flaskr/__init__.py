@@ -3,12 +3,12 @@
 User are able to add their books to the bookshelf, give them a rating, update
 the rating and search through their book lists.
 
-    Usage: flask run
+Usage: flask run
 
 Attributes:
-    BOOKS_PER_SHELF: An int that is a global constate representing how mnay
+    BOOKS_PER_SHELF: An int that is a global constate representing how many
         books to show on a page
-    app: A flask Flack object creating the flask app
+    app: A flask Flask object creating the flask app
 """
 
 import os
@@ -26,7 +26,7 @@ CORS(app)
 
 
 def paginate_books(books, page):
-    """Retrieve books for the current page only
+    """Retrieve books for the current page only.
 
     Args:
         request: A flask request object
@@ -35,7 +35,6 @@ def paginate_books(books, page):
     Returns:
         A list of book objects for the given page formatted into a dict
     """
-
     books = [book.format() for book in books]
     start = (page - 1) * BOOKS_PER_SHELF
     end = start + BOOKS_PER_SHELF
@@ -46,7 +45,7 @@ def paginate_books(books, page):
 
 @app.after_request
 def after_request(response):
-    """Adds response headers after request
+    """Adds response headers after request.
 
     Args:
         response: The response object to add headers to
@@ -54,7 +53,6 @@ def after_request(response):
     Returns:
         response: The response object that the headers were added to
     """
-
     response.headers.add(
         "Access-Control-Allow-Headers", "Content-Type, Authorization, true"
     )
@@ -67,12 +65,11 @@ def after_request(response):
 
 @app.route("/books")
 def get_books():
-    """Route handler for endpoint showing all books
+    """Route handler for endpoint showing all books.
 
     Returns:
         response: A json object representing all books
     """
-
     books = Book.query.order_by(Book.id).all()
     page = request.args.get("page", 1, type=int)
     current_books = paginate_books(books, page)
@@ -89,13 +86,12 @@ def get_books():
 
 @app.route("/books", methods=["POST"])
 def create_book():
-    """Route handler for endpoint to create a book
+    """Route handler for endpoint to create a book.
 
     Returns:
         response: A json object containing the id of the book that was
             created and a list of the remaining books
     """
-
     try:
 
         search_term = request.json.get("search")
@@ -153,7 +149,7 @@ def create_book():
 
 @app.route("/books/<int:book_id>", methods=["PATCH"])
 def patch_book_rating(book_id):
-    """Route handler for endpoint updating the rating of a single book
+    """Route handler for endpoint updating the rating of a single book.
 
     Args:
         book_id: An int representing the identifier for the book to update
@@ -162,7 +158,6 @@ def patch_book_rating(book_id):
     Returns:
         response: A json object stating if the request was successful
     """
-
     book = Book.query.get(book_id)
 
     if book is None:
@@ -195,7 +190,7 @@ def patch_book_rating(book_id):
 
 @app.route("/books/<int:book_id>", methods=["DELETE"])
 def delete_book(book_id):
-    """Route handler for endpoint to delete a single book
+    """Route handler for endpoint to delete a single book.
 
     Args:
         book_id: An int representing the identifier for a book to delete
@@ -204,7 +199,6 @@ def delete_book(book_id):
         response: A json object containing the id of the book that was
             deleted and a list of the remaining books
     """
-
     book = Book.query.get(book_id)
 
     if book is None:
@@ -230,7 +224,7 @@ def delete_book(book_id):
 
 @app.errorhandler(400)
 def bad_request(error):  # pylint: disable=unused-argument
-    """Error handler for 400 bad request
+    """Error handler for 400 bad request.
 
     Args:
         error: unused
@@ -247,7 +241,7 @@ def bad_request(error):  # pylint: disable=unused-argument
 
 @app.errorhandler(404)
 def not_found(error):  # pylint: disable=unused-argument
-    """Error handler for 404 not found
+    """Error handler for 404 not found.
 
     Args:
         error: unused
@@ -263,7 +257,7 @@ def not_found(error):  # pylint: disable=unused-argument
 
 @app.errorhandler(405)
 def method_not_allowed(error):  # pylint: disable=unused-argument
-    """Error handler for 405 method not allowed
+    """Error handler for 405 method not allowed.
 
     Args:
         error: unused
@@ -279,7 +273,7 @@ def method_not_allowed(error):  # pylint: disable=unused-argument
 
 @app.errorhandler(422)
 def unprocessable_entity(error):  # pylint: disable=unused-argument
-    """Error handler for 422 unprocessable entity
+    """Error handler for 422 unprocessable entity.
 
     Args:
         error: unused
@@ -299,7 +293,7 @@ def unprocessable_entity(error):  # pylint: disable=unused-argument
 
 @app.errorhandler(500)
 def internal_server_error(error):  # pylint: disable=unused-argument
-    """Error handler for 500 internal server error
+    """Error handler for 500 internal server error.
 
     Args:
         error: unused
