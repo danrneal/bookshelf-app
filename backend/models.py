@@ -12,8 +12,8 @@ Classes:
     Book()
 """
 
-from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, Integer, String
 
 DB_DIALECT = "postgresql"
 DB_HOST = "localhost"

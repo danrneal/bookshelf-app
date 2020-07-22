@@ -11,12 +11,10 @@ Attributes:
     app: A flask Flask object creating the flask app
 """
 
-import os
-import random
-from flask import Flask, request, abort, jsonify
+from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-from models import setup_db, Book
+
+from models import Book, setup_db
 
 BOOKS_PER_SHELF = 8
 

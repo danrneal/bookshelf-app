@@ -7,8 +7,9 @@ Classes:
 """
 
 import unittest
+
 from flaskr import BOOKS_PER_SHELF, app
-from models import DB_DIALECT, DB_HOST, DB_PORT, setup_db, Book
+from models import DB_DIALECT, DB_HOST, DB_PORT, Book, setup_db
 
 
 class BookTestCase(unittest.TestCase):
