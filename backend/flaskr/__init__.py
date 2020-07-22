@@ -56,16 +56,16 @@ def after_request(response):
     """
 
     response.headers.add(
-        'Access-Control-Allow-Headers', 'Content-Type, Authorization, true'
+        "Access-Control-Allow-Headers", "Content-Type, Authorization, true"
     )
     response.headers.add(
-        'Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE, OPTIONS'
+        "Access-Control-Allow-Methods", "GET, PATCH, POST, DELETE, OPTIONS"
     )
 
     return response
 
 
-@app.route('/books')
+@app.route("/books")
 def get_books():
     """Route handler for endpoint showing all books
 
@@ -74,22 +74,20 @@ def get_books():
     """
 
     books = Book.query.order_by(Book.id).all()
-    page = request.args.get('page', 1, type=int)
+    page = request.args.get("page", 1, type=int)
     current_books = paginate_books(books, page)
 
     if not current_books:
         abort(404)
 
-    response = jsonify({
-        'success': True,
-        'books': current_books,
-        'total_books': len(books),
-    })
+    response = jsonify(
+        {"success": True, "books": current_books, "total_books": len(books)}
+    )
 
     return response
 
 
-@app.route('/books', methods=['POST'])
+@app.route("/books", methods=["POST"])
 def create_book():
     """Route handler for endpoint to create a book
 
@@ -100,44 +98,52 @@ def create_book():
 
     try:
 
-        search_term = request.json.get('search')
+        search_term = request.json.get("search")
 
         if search_term:
 
-            books = Book.query.filter(
-                Book.title.ilike(f'%{search_term}%') |
-                Book.author.ilike(f'%{search_term}%')
-            ).order_by(Book.id).all()
-            page = request.args.get('patch', 1, type=int)
+            books = (
+                Book.query.filter(
+                    Book.title.ilike(f"%{search_term}%")
+                    | Book.author.ilike(f"%{search_term}%")
+                )
+                .order_by(Book.id)
+                .all()
+            )
+            page = request.args.get("patch", 1, type=int)
             current_books = paginate_books(books, page)
 
-            response = jsonify({
-                'success': True,
-                'books': current_books,
-                'total_books': len(books),
-            })
+            response = jsonify(
+                {
+                    "success": True,
+                    "books": current_books,
+                    "total_books": len(books),
+                }
+            )
 
         else:
 
             book = Book(
-                title=request.json.get('title'),
-                author=request.json.get('author'),
-                rating=request.json.get('rating'),
+                title=request.json.get("title"),
+                author=request.json.get("author"),
+                rating=request.json.get("rating"),
             )
 
             book.insert()
 
             book_id = book.id
             books = Book.query.order_by(Book.id).all()
-            page = request.args.get('page', 1, type=int)
+            page = request.args.get("page", 1, type=int)
             current_books = paginate_books(books, page)
 
-            response = jsonify({
-                'success': True,
-                'created_book_id': book_id,
-                'books': current_books,
-                'total_books': len(books),
-            })
+            response = jsonify(
+                {
+                    "success": True,
+                    "created_book_id": book_id,
+                    "books": current_books,
+                    "total_books": len(books),
+                }
+            )
 
     except AttributeError:
         abort(400)
@@ -145,7 +151,7 @@ def create_book():
     return response
 
 
-@app.route('/books/<int:book_id>', methods=['PATCH'])
+@app.route("/books/<int:book_id>", methods=["PATCH"])
 def patch_book_rating(book_id):
     """Route handler for endpoint updating the rating of a single book
 
@@ -165,7 +171,7 @@ def patch_book_rating(book_id):
     try:
 
         old_rating = book.rating
-        rating = request.json.get('rating')
+        rating = request.json.get("rating")
 
         if rating:
             book.rating = int(rating)
@@ -175,17 +181,19 @@ def patch_book_rating(book_id):
     except AttributeError:
         abort(400)
 
-    response = jsonify({
-        'success': True,
-        'updated_book_id': book_id,
-        'old_rating': old_rating,
-        'new_rating': book.rating,
-    })
+    response = jsonify(
+        {
+            "success": True,
+            "updated_book_id": book_id,
+            "old_rating": old_rating,
+            "new_rating": book.rating,
+        }
+    )
 
     return response
 
 
-@app.route('/books/<int:book_id>', methods=['DELETE'])
+@app.route("/books/<int:book_id>", methods=["DELETE"])
 def delete_book(book_id):
     """Route handler for endpoint to delete a single book
 
@@ -205,15 +213,17 @@ def delete_book(book_id):
     book.delete()
 
     books = Book.query.order_by(Book.id).all()
-    page = request.args.get('page', 1, type=int)
+    page = request.args.get("page", 1, type=int)
     current_books = paginate_books(books, page)
 
-    response = jsonify({
-        'success': True,
-        'deleted_book_id': book_id,
-        'books': current_books,
-        'total_books': len(books),
-    })
+    response = jsonify(
+        {
+            "success": True,
+            "deleted_book_id": book_id,
+            "books": current_books,
+            "total_books": len(books),
+        }
+    )
 
     return response
 
@@ -228,12 +238,9 @@ def bad_request(error):  # pylint: disable=unused-argument
     Returns:
         Response: A json object with the error code and message
     """
-
-    response = jsonify({
-        'success': False,
-        'error_code': 400,
-        'message': 'Bad Request',
-    })
+    response = jsonify(
+        {"success": False, "error_code": 400, "message": "Bad Request"}
+    )
 
     return response, 400
 
@@ -248,11 +255,9 @@ def not_found(error):  # pylint: disable=unused-argument
     Returns:
         Response: A json object with the error code and message
     """
-    response = jsonify({
-        'success': False,
-        'error_code': 404,
-        'message': 'Not Found',
-    })
+    response = jsonify(
+        {"success": False, "error_code": 404, "message": "Not Found"}
+    )
     return response, 404
 
 
@@ -266,11 +271,9 @@ def method_not_allowed(error):  # pylint: disable=unused-argument
     Returns:
         Response: A json object with the error code and message
     """
-    response = jsonify({
-        'success': False,
-        'error_code': 405,
-        'message': 'Method Not Allowed',
-    })
+    response = jsonify(
+        {"success": False, "error_code": 405, "message": "Method Not Allowed"}
+    )
     return response, 405
 
 
@@ -284,11 +287,13 @@ def unprocessable_entity(error):  # pylint: disable=unused-argument
     Returns:
         Response: A json object with the error code and message
     """
-    response = jsonify({
-        'success': False,
-        'error_code': 422,
-        'message': 'Unprocessable Entity',
-    })
+    response = jsonify(
+        {
+            "success": False,
+            "error_code": 422,
+            "message": "Unprocessable Entity",
+        }
+    )
     return response, 422
 
 
@@ -302,9 +307,11 @@ def internal_server_error(error):  # pylint: disable=unused-argument
     Returns:
         Response: A json object with the error code and message
     """
-    response = jsonify({
-        'success': False,
-        'error_code': 500,
-        'message': 'Internal Server Error',
-    })
+    response = jsonify(
+        {
+            "success": False,
+            "error_code": 500,
+            "message": "Internal Server Error",
+        }
+    )
     return response, 500

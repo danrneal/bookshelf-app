@@ -12,12 +12,12 @@ Attributes:
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 
-DB_DIALECT = 'postgresql'
-DB_HOST = 'localhost'
+DB_DIALECT = "postgresql"
+DB_HOST = "localhost"
 DB_PORT = 5432
-DB_NAME = 'bookshelf'
+DB_NAME = "bookshelf"
 
-DB_PATH = f'{DB_DIALECT}://{DB_HOST}:{DB_PORT}/{DB_NAME}'
+DB_PATH = f"{DB_DIALECT}://{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 db = SQLAlchemy()
 
@@ -29,8 +29,8 @@ def setup_db(app, database_path=DB_PATH):
         app: A flask app
         database_path: A str representing the location of the db
     """
-    app.config['SQLALCHEMY_DATABASE_URI'] = database_path
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
     db.create_all()
@@ -46,7 +46,7 @@ class Book(db.Model):
         rating: An int representing the rating of a book
     """
 
-    __tablename__ = 'books'
+    __tablename__ = "books"
 
     id = Column(Integer, primary_key=True)
     title = Column(String)
@@ -79,8 +79,8 @@ class Book(db.Model):
             plant: A dict representing the book object
         """
         return {
-            'id': self.id,
-            'title': self.title,
-            'author': self.author,
-            'rating': self.rating,
+            "id": self.id,
+            "title": self.title,
+            "author": self.author,
+            "rating": self.rating,
         }
