@@ -190,7 +190,7 @@ class BookTestCase(unittest.TestCase):
 
     def test_book_get_method_not_allowed_fail(self):
         """Test that get method is not allowed at /books/id endpoint."""
-        response = self.client().get(f"/books/1")
+        response = self.client().get("/books/1")
 
         self.assertEqual(response.status_code, 405)
         self.assertEqual(response.json.get("success"), False)
@@ -198,7 +198,7 @@ class BookTestCase(unittest.TestCase):
 
     def test_book_post_method_not_allowed_fail(self):
         """Test that post method is not allowed at /books/id endpoint."""
-        response = self.client().post(f"books/1")
+        response = self.client().post("books/1")
 
         self.assertEqual(response.status_code, 405)
         self.assertEqual(response.json.get("success"), False)
