@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
 import $ from 'jquery';
-
+import React, { Component } from 'react';
 import '../stylesheets/FormView.css';
 
 class FormView extends Component {
@@ -11,7 +10,7 @@ class FormView extends Component {
       author: '',
       rating: 1,
       search: '',
-    }
+    };
   }
 
   submitBook = (event) => {
@@ -27,7 +26,7 @@ class FormView extends Component {
         rating: this.state.rating,
       }),
       xhrFields: {
-        withCredentials: true
+        withCredentials: true,
       },
       crossDomain: true,
       success: (result) => {
@@ -35,33 +34,41 @@ class FormView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to add book. Please try your request again')
+        alert('Unable to add book. Please try your request again');
         return;
-      }
-    })
-  }
+      },
+    });
+  };
 
   handleSearch = (event) => {
     event.preventDefault();
     this.props.searchBooks(this.state.search);
-  }
+  };
 
   handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value })
-  }
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
   render() {
     return (
       <div id="form-view">
         <div className="search">
           <h2>Search</h2>
-          <form className="FormView" id="search-form" onSubmit={this.handleSearch}>
+          <form
+            className="FormView"
+            id="search-form"
+            onSubmit={this.handleSearch}
+          >
             <input type="text" name="search" onChange={this.handleChange} />
             <input type="submit" className="button" value="Submit" />
           </form>
         </div>
         <h2>Add a New Book</h2>
-        <form className="FormView" id="add-book-form" onSubmit={this.submitBook}>
+        <form
+          className="FormView"
+          id="add-book-form"
+          onSubmit={this.submitBook}
+        >
           <label>
             Title
             <input type="text" name="title" onChange={this.handleChange} />

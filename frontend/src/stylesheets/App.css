@@ -1,7 +1,7 @@
 .App {
   display: flex;
   flex-direction: row;
-  margin: 35px 10px 0px;
+  margin: 35px 10px 0;
 }
 
 div#main-view {
@@ -20,14 +20,13 @@ div#form-view {
 .pagination-menu {
   display: flex;
   width: fit-content;
-  margin: 0px auto;
+  margin: 0 auto;
   text-align: center;
 }
 
-
 .page-num {
   display: inline-block;
-  margin: 0px 3px;
+  margin: 0 3px;
 }
 
 .page-num.active {

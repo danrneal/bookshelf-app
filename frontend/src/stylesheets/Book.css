@@ -1,50 +1,50 @@
 div.star {
-    width: 20px;
-    height: 20px;
-    margin: 2px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-image: url('../star-black.png');
+  width: 20px;
+  height: 20px;
+  margin: 2px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url('../star-black.png');
 }
 
 div.star.active {
-    background-image: url('../star.png')
+  background-image: url('../star.png');
 }
 
 .delete {
-    width: 20px;
-    height: 20px;
-    margin: 2px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-image: url('../trash.png')
+  width: 20px;
+  height: 20px;
+  margin: 2px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url('../trash.png');
 }
 
 .rating {
-    display: flex;
+  display: flex;
 }
 
 .title {
-    display: inline-block;
-    padding: 50% 0;
-    width: 65%;
-    color: azure;
+  display: inline-block;
+  padding: 50% 0;
+  width: 65%;
+  color: azure;
 }
 
 .book {
-    flex-basis: 25%;
-    height: 350px
+  flex-basis: 25%;
+  height: 350px;
 }
 
 .author {
-    margin: 5px 0px;
+  margin: 5px 0;
 }
 
 .cover {
-    width: 144px;
-    height: 210px;
-    text-align: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-image: url('../cover.jpg')
+  width: 144px;
+  height: 210px;
+  text-align: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url('../cover.jpg');
 }

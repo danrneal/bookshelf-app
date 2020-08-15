@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
 import $ from 'jquery';
-
-import './stylesheets/App.css';
-import FormView from './components/FormView';
+import React, { Component } from 'react';
 import Book from './components/Book';
-
+import FormView from './components/FormView';
+import './stylesheets/App.css';
 
 class App extends Component {
   constructor(props) {
@@ -12,8 +10,8 @@ class App extends Component {
     this.state = {
       page: 1,
       totalBooks: 0,
-      books: []
-    }
+      books: [],
+    };
   }
 
   getBooks = () => {
@@ -23,16 +21,16 @@ class App extends Component {
       success: (result) => {
         this.setState({
           totalBooks: result.total_books,
-          books: result.books
-        })
+          books: result.books,
+        });
         return;
       },
       error: (error) => {
-        alert('Unable to load books. Please try your request again')
+        alert('Unable to load books. Please try your request again');
         return;
-      }
-    })
-  }
+      },
+    });
+  };
 
   deleteBook = (id) => {
     if (window.confirm('Are you sure you want to delete the book?')) {
@@ -43,15 +41,15 @@ class App extends Component {
           this.getBooks();
         },
         error: (error) => {
-          alert('Unable to delete the book.')
+          alert('Unable to delete the book.');
           return;
-        }
-      })
+        },
+      });
     }
-  }
+  };
 
   changeRating = (id, rating) => {
-    let books = [...this.state.books]
+    let books = [...this.state.books];
     let targetBook = books.find((book) => book.id === id);
 
     $.ajax({
@@ -59,17 +57,17 @@ class App extends Component {
       type: 'PATCH',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify({ 'rating': rating }),
+      data: JSON.stringify({ rating: rating }),
       success: (result) => {
-        targetBook.rating = rating
-        this.setState({ books })
+        targetBook.rating = rating;
+        this.setState({ books });
       },
       error: (error) => {
-        alert('Unable to update the rating.')
+        alert('Unable to update the rating.');
         return;
-      }
-    })
-  }
+      },
+    });
+  };
 
   searchBooks = (search) => {
     $.ajax({
@@ -79,28 +77,27 @@ class App extends Component {
       contentType: 'application/json',
       data: JSON.stringify({ search: search }),
       xhrFields: {
-        withCredentials: true
+        withCredentials: true,
       },
       crossDomain: true,
       success: (result) => {
         this.setState({
           totalBooks: result.total_books,
           books: result.books,
-          page: 1
-        })
+          page: 1,
+        });
         document.getElementById('search-form').reset();
         return;
       },
       error: (error) => {
-        alert('Unable to complete search. Please try your request again')
+        alert('Unable to complete search. Please try your request again');
         return;
-      }
-    })
-  }
-
+      },
+    });
+  };
 
   componentDidMount() {
-    this.getBooks()
+    this.getBooks();
   }
 
   selectPage(num) {
@@ -109,14 +106,19 @@ class App extends Component {
 
   createPagination() {
     let pageNumbers = [];
-    let maxPage = Math.ceil(this.state.totalBooks / 8)
+    let maxPage = Math.ceil(this.state.totalBooks / 8);
     for (let i = 1; i <= maxPage; i++) {
       pageNumbers.push(
         <div
           key={i}
           className={`page-num ${i === this.state.page ? 'active' : ''}`}
-          onClick={() => { this.selectPage(i) }}>{i}
-        </div>)
+          onClick={() => {
+            this.selectPage(i);
+          }}
+        >
+          {i}
+        </div>
+      );
     }
     return pageNumbers;
   }
@@ -135,14 +137,11 @@ class App extends Component {
               />
             ))}
           </div>
-          <div className="pagination-menu">
-            {this.createPagination()}
-          </div>
+          <div className="pagination-menu">{this.createPagination()}</div>
         </div>
         <FormView searchBooks={this.searchBooks} />
       </div>
     );
-
   }
 }
 
